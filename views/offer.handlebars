@@ -1,0 +1,41 @@
+<div class="container">
+    <form method="post">
+        <fieldset>
+            <legend>{{tableTitle}}</legend>
+            
+            <label for="startZip">Starting zipcode</label>
+            <input type="text" name="startZip" id="startZip">
+            
+            <label for="endZip">Ending zipcode</label>
+            <input type="text" name="endZip" id="endZip">
+            
+            <label for="days">Days</label>
+            <input type="checkbox" name="sun" value="1"> Sun /
+            <input type="checkbox" name="mon" value="1"> Mon /
+            <input type="checkbox" name="tue" value="1"> Tues /
+            <input type="checkbox" name="wed" value="1"> Wed /
+            <input type="checkbox" name="thur" value="1"> Thurs /
+            <input type="checkbox" name="fri" value="1"> Fri /
+            <input type="checkbox" name="sat" value="1"> Sat
+            <br><br>
+            
+            <label for="startTime">Start time (24 hour, e.g. "13:00")</label>
+            <input type="text" name="startTime" id="startTime">
+            
+            <label for="endTime">End time</label>
+            <input type="text" name="endTime" id="endTime">
+            
+            {{#if driver}}
+            <label for="cap">Capacity</label>
+            <input type="text" name="cap" id="cap">
+            {{/if}}
+            
+            <label for="phoneNumber">Phone number</label>
+            <input type="text" name="phoneNumber" id="phoneNumber">
+                       
+            <br>
+            
+            <input type="submit" value="Submit">
+        </fieldset>
+    </form>
+</div>
