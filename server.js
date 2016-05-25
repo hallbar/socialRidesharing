@@ -210,11 +210,40 @@ app.post('/driverOffer', function(req, res, next) {
     
 });
 
+app.get('/myTrips', function(req, res, next) {
+        res.render("myTrips"); 
+    
+}); 
+
+// SELECT * FROM trip 
+// INNER JOIN people_trip ON people_trip.tid = trip.tid
+// INNER JOIN people ON people.id = people_trip.pid
+// WHERE people.phone = ?
+app.post('/myTrips', function(req, res, next) {
+    var context = {};
+    
+    pool.query("SELECT * FROM trips " +
+        "INNER JOIN people_trips ON people_trips.tid = trips.tid " + 
+        "INNER JOIN people ON people.pid = people_trips.pid " + 
+        "WHERE phone=?", [req.body.phone], function(err, rows, fields) {
+            if(err) {
+                res.send("There was an error " + err);
+                next(err); 
+            }
+            // console.log(rows);
+            context.trip = rows; 
+        
+        res.render('myTrips', context); 
+            
+    });
+        
+}); 
+
 app.use(function(err, req, res, next) {
 	console.error(err.stack);
 	res.type('plain/text');
 	res.status(500);
-	res.render('500 - ' + err);
+	res.render('500');
 });
 
 

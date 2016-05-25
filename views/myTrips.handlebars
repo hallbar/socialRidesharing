@@ -1,0 +1,48 @@
+<div class="container">
+    <form method="post">
+        <fieldset>
+            <legend> My Trips </legend>
+                <label> Please enter your phone number </label>
+                    <input type="text" name="phone" id="phone">
+        </fieldset>
+        <input type="submit" value="Submit">
+    </form>
+        
+        <br/>
+        <table>
+            <thead>
+                <tr>
+                    <th>Start Zip Code</th>
+                    <th>End ZIp Code</th>
+                    <th>Sunday</th>
+                    <th>Monday</th>
+                    <th>Tuesday</th>
+                    <th>Wednesday</th>
+                    <th>Thursday</th>
+                    <th>Friday</th>
+                    <th>Saturday</th>
+                    <th>Start Time</th>
+                    <th>End Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each trip}}
+                <tr>
+                    <td>{{this.startZip}}</td>
+                    <td>{{this.endZip}}</td>
+                    <td>{{this.sun}}</td>
+                    <td>{{this.mon}}</td>
+                    <td>{{this.tue}}</td>
+                    <td>{{this.wed}}</td>
+                    <td>{{this.thur}}</td>
+                    <td>{{this.fri}}</td>
+                    <td>{{this.sat}}</td>
+                    <td>{{this.startTime}}</td>
+                    <td>{{this.endTime}}</td>
+                    {{!--<td>cap</td>--}}
+                    {{!--<td>numPeople</td>--}}
+                </tr>
+                {{/each}}        
+            </tbody>
+        </table>
+</div>
