@@ -1,3 +1,7 @@
 <p>Sign Up Successful</p>
-
-<p>Continue to Post an Offer <a href="/driverOffer">here</a></p>
+{{#if 'driver'}}
+    <p>Continue to Post an Offer <a href="/driverOffer">here</a></p>
+{{else}} {{#if 'rider'}}
+    <p>Continue to Post an Offer <a href="/riderOffer">here</a></p>
+{{/if}}
+{{/if}}
