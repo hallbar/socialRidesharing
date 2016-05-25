@@ -50,10 +50,10 @@ app.post('/driverSignUp', function(req, res, next) {
                 res.send('Database query was not successful' + err);
                 next(err);
             }
-            // res.render('signupsuccess', {
-            //     title: 'Sign Up Successful'
-            // });
-            res.render('signupsuccess', 'driver');
+            res.render('signupsuccess', {
+                title: 'Sign Up Successful',
+                driver: true
+            });
         });
     }
 });
@@ -73,10 +73,10 @@ app.post('/riderSignUp', function(req, res, next) {
                 res.send('Database query was not successful' + err);
                 next(err);
             }
-            // res.render('signupsuccess', {
-            //     title: 'Sign Up Successful'
-            // });
-            res.render('signupsuccess', 'rider');
+            res.render('signupsuccess', {
+                title: 'Sign Up Successful',
+                rider: true        
+            });
         });
     }
 });
