@@ -1,14 +1,15 @@
-<div class="container">
+<div class="col-md-6">
     <form method="post">
-        <fieldset>
             <legend>{{tableTitle}}</legend>
-            
+        <div class="form-group">    
             <label for="startZip">Starting zipcode</label>
-            <input type="text" name="startZip" id="startZip">
-            
+            <input class="form-control" type="text" name="startZip" id="startZip">
+        </div>
+        <div class="form-group">
             <label for="endZip">Ending zipcode</label>
-            <input type="text" name="endZip" id="endZip">
-            
+            <input class="form-control" type="text" name="endZip" id="endZip">
+        </div>
+        <div class="form-group">
             <label for="days">Days</label>
             <input type="checkbox" name="sun" value="1"> Sun /
             <input type="checkbox" name="mon" value="1"> Mon /
@@ -17,25 +18,29 @@
             <input type="checkbox" name="thur" value="1"> Thurs /
             <input type="checkbox" name="fri" value="1"> Fri /
             <input type="checkbox" name="sat" value="1"> Sat
-            <br><br>
-            
-            <label for="startTime">Start time (24 hour, e.g. "13:00")</label>
-            <input type="text" name="startTime" id="startTime">
-            
-            <label for="endTime">End time</label>
-            <input type="text" name="endTime" id="endTime">
-            
-            {{#if driver}}
-            <label for="cap">Capacity</label>
-            <input type="text" name="cap" id="cap">
-            {{/if}}
-            
+        </div>
+        <div class="form-group">
+            <label for="startTime">Start time (24 hour, e.g. "13:00" instead of "1:00 PM")</label>
+            <input class="form-control" type="time" name="startTime" id="startTime">
+        </div>
+        <div class="form-group">
+            <label for="endTime">End time (24 hour, e.g. "13:00" instead of "1:00 PM")</label>
+            <input class="form-control" type="time" name="endTime" id="endTime">
+        </div>
+        {{#if driver}}
+            <div class="form-group">
+                <label for="cap">Capacity</label>
+                <input class="form-control" type="number" min="1" max="10" name="cap" id="cap">
+            </div>
+        {{/if}}
+        <div class="form-group">
             <label for="phoneNumber">Phone number</label>
-            <input type="text" name="phoneNumber" id="phoneNumber">
-                       
-            <br>
-            
-            <input type="submit" value="Submit">
-        </fieldset>
+            <input class="form-control" type="tel" name="phoneNumber" id="phoneNumber">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
     </form>
+</div>
+<div class="col-md-6">
+    <!-- picture goes here -->
+    <img src="static/img/carpool.jpg" class="img-responsive img-rounded">
 </div>

@@ -58,85 +58,89 @@ app.post('/driverSignUp', function(req, res, next) {
     }
 });
 
-app.get('/riderSignUp', function(req, res) {
-    res.render('signUp', {
-        title: 'Rider Sign Up',
-        role: 'Rider'
-    });
-});
+// app.get('/riderSignUp', function(req, res) {
+//     res.render('signUp', {
+//         title: 'Rider Sign Up',
+//         role: 'Rider'
+//     });
+// });
 
-app.post('/riderSignUp', function(req, res, next) {
-    if(req.body.FirstName.length > 0 && req.body.LastName.length > 0 && req.body.PhoneNumber.length > 0) {
-        pool.query("INSERT INTO `people` (`fname`, `lname`, `phone`, `driver`) VALUES (?, ?, ?, ?)", 
-            [req.body.FirstName, req.body.LastName, req.body.PhoneNumber, 0], function(err, result) {
-            if(err) {
-                res.send('Database query was not successful' + err);
-                next(err);
-            }
-            res.render('signupsuccess', {
-                title: 'Sign Up Successful',
-                rider: true        
-            });
-        });
-    }
-});
+// app.post('/riderSignUp', function(req, res, next) {
+//     if(req.body.FirstName.length > 0 && req.body.LastName.length > 0 && req.body.PhoneNumber.length > 0) {
+//         pool.query("INSERT INTO `people` (`fname`, `lname`, `phone`, `driver`) VALUES (?, ?, ?, ?)", 
+//             [req.body.FirstName, req.body.LastName, req.body.PhoneNumber, 0], function(err, result) {
+//             if(err) {
+//                 res.send('Database query was not successful' + err);
+//                 next(err);
+//             }
+//             res.render('signupsuccess', {
+//                 title: 'Sign Up Successful',
+//                 rider: true        
+//             });
+//         });
+//     }
+// });
 
-app.get('/riderOffer', function(req, res) {
-    res.render('offer', {
-        title: 'Ride Request',
-        tableTitle: 'Ride Request'
-    });
-});
+// app.get('/riderOffer', function(req, res) {
+//     res.render('offer', {
+//         title: 'Ride Request',
+//         tableTitle: 'Ride Request'
+//     });
+// });
 
-app.post('/riderOffer', function(req, res) {
-   if(req.body) {
-        pool.query("SELECT pid FROM `people` WHERE phone=" + req.body.phoneNumber, function(err, result) {
-            if(err || result.length === 0) {
-                console.log("not found");
-                res.send("Phone number not registered. Please register before submitting an offer.");
-                return;
-            }
-            console.log('inserting into trips');
+// app.post('/riderOffer', function(req, res, next) {
+//   if(req.body) {
+//         pool.query("SELECT pid FROM `people` WHERE phone=" + req.body.phoneNumber, function(err, result) {
+//             if(err || result.length === 0) {
+//                 console.log("not found");
+//                 res.send("Phone number not registered. Please register before submitting an offer.");
+//                 return;
+//             }
+//             console.log('inserting into trips');
             
-            var fields = ['startZip', 'endZip', 'sun', 'mon', 'tue', 'wed', 'thur', 'fri', 'sat', 'startTime', 'endTime', 'cap', 'numPeople', 'pid'];
-            var defaults = [undefined, undefined, 0, 0, 0, 0, 0, 0, 0, undefined, undefined, 0, 1, result[0].pid];
-            var values = [];
-            var query = [];
-            query.push("INSERT INTO `trips` ");
-            query.push("(");
-            for(var f in fields) {
-                query.push("`" + fields[f] + "`");
-                if(f != fields.length - 1)
-                    query.push(", ");
+//             var fields = ['startZip', 'endZip', 'sun', 'mon', 'tue', 'wed', 'thur', 'fri', 'sat', 'startTime', 'endTime', 'cap', 'numPeople', 'pid'];
+//             var defaults = [undefined, undefined, 0, 0, 0, 0, 0, 0, 0, undefined, undefined, 0, 1, result[0].pid];
+//             var values = [];
+//             var query = [];
+//             query.push("INSERT INTO `trips` ");
+//             query.push("(");
+//             for(var f in fields) {
+//                 query.push("`" + fields[f] + "`");
+//                 if(f != fields.length - 1)
+//                     query.push(", ");
                     
-                var value = req.body[fields[f]] || defaults[f];
-                if(value === undefined) {
-                    throw "Value " + fields[f] + " was not defined!";
-                }
-                values.push(value);
-            }
-            // values.push(result[0].pid);
-            query.push(") VALUES (");
-            for(var f in fields) {
-                query.push("?");
-                if(f != fields.length - 1)
-                    query.push(", ");
-            }
-            query.push(")");
+//                 var value = req.body[fields[f]] || defaults[f];
+//                 if(value === undefined) {
+//                     throw "Value " + fields[f] + " was not defined!";
+//                 }
+//                 values.push(value);
+//             }
+//             // values.push(result[0].pid);
+//             query.push(") VALUES (");
+//             for(var f in fields) {
+//                 query.push("?");
+//                 if(f != fields.length - 1)
+//                     query.push(", ");
+//             }
+//             query.push(")");
             
-            //console.log(query.join(""));
-            //console.log(values);
+//             //console.log(query.join(""));
+//             //console.log(values);
             
-            var pid = result[0].pid;
+//             var pid = result[0].pid;
             
-            pool.query(query.join(""), values, function(err, result) {
-                res.send('Offer posted successfully');
+//             pool.query(query.join(""), values, function(err, result) {
+//                 res.render('offerSuccess');
+//                 if(err) {
+//                     next(err);
+//                     return;
+//                 }
                 
-                // need to match and insert into people trips
-            });
-        });
-    } 
-});
+//                 // need to match and insert into people trips
+//             });
+//         });
+//     } 
+// });
 
 app.get('/driverOffer', function(req, res) {
     res.render('offer', {
@@ -196,13 +200,12 @@ app.post('/driverOffer', function(req, res, next) {
                     res.send('`trips` query was not successful' + err);
                     next(err);
                 }
-                res.send('Offer posted successfully');
+                res.render('offerSuccess');
                 
                 var tid = result.insertId;
                 pool.query("INSERT INTO `people_trips` (pid, tid, driverId) VALUES (?, ?, ?)", [pid, tid, pid], function(err, result) {
                     if(err) {
                         res.send('`people_trips` query was not successful' + err);
-                        next(err);
                     }
                     res.send('Offer posted successfully!');
                 });
@@ -212,11 +215,18 @@ app.post('/driverOffer', function(req, res, next) {
     
 });
 
+// default view of /myTrips
+// generated if user performs GET request of /myTrips
+// allows user to enter phone number to generate list of trips
+// which are attached to a trip id
 app.get('/myTrips', function(req, res, next) {
         res.render("myTrips"); 
-    
 }); 
 
+// view of /myTrips once user has entered valid phone number
+// generates list of trips which are attached to a trip id
+// containing the valid phone number
+// ~~~~~~~~~~~~~~~~~~~~~~~~
 // SELECT * FROM trip 
 // INNER JOIN people_trip ON people_trip.tid = trip.tid
 // INNER JOIN people ON people.id = people_trip.pid
@@ -225,8 +235,7 @@ app.post('/myTrips', function(req, res, next) {
     var context = {};
     
     pool.query("SELECT * FROM trips " +
-        "INNER JOIN people_trips ON people_trips.tid = trips.tid " + 
-        "INNER JOIN people ON people.pid = people_trips.pid " + 
+        "INNER JOIN people ON people.pid = trips.pid " + 
         "WHERE phone=?", [req.body.phone], function(err, rows, fields) {
             if(err) {
                 res.send("There was an error " + err);
@@ -235,11 +244,39 @@ app.post('/myTrips', function(req, res, next) {
             // console.log(rows);
             context.trip = rows; 
         
-        res.render('myTrips', context); 
+        res.render('myTrips', context);
             
     });
         
 }); 
+
+// If user requests trip cancellation on /myTrips, generates page with trip info
+// taken from trip id. Requests user confirmation for trip deletion.
+// Confirm: /cancel (POST)
+// Cancel: /myTrips (GET)
+app.get('/cancel-confirm', function(req, res, next) {
+    var context = {};
+    pool.query("SELECT * FROM trips WHERE tid=?", [req.query.id], function(err, rows, fields) {
+        if (err) {
+            next(err);
+            return;
+        }
+        context.result = rows;
+        res.render('cancel-confirm', context);
+    });
+});
+
+// If user confirms trip cancellation on /cancel-confirm, POSTs MySQL DELETE query
+// to database. Generates trip cancellation confirmation page with link to /myTrips
+app.get('/cancel', function(req, res, next){
+    pool.query("DELETE FROM trips WHERE tid=?", [req.query.id], function(err, result) {
+        if(err){
+            next(err);
+            return;
+        }
+    });
+    res.render('cancel');
+});
 
 app.use(function(err, req, res, next) {
 	console.error(err.stack);

@@ -1,48 +1,58 @@
-<div class="container">
+<div class="col-md-6">
     <form method="post">
-        <fieldset>
-            <legend> My Trips </legend>
-                <label> Please enter your phone number </label>
-                    <input type="text" name="phone" id="phone">
-        </fieldset>
-        <input type="submit" value="Submit">
+        <legend> My Trips </legend>
+        <div class="form-group">
+            <label for="phone"> Please enter your phone number </label>
+            <input class="form-control" type="text" name="phone" id="phone">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
     </form>
-        
-        <br/>
-        <table>
-            <thead>
-                <tr>
-                    <th>Start Zip Code</th>
-                    <th>End ZIp Code</th>
-                    <th>Sunday</th>
-                    <th>Monday</th>
-                    <th>Tuesday</th>
-                    <th>Wednesday</th>
-                    <th>Thursday</th>
-                    <th>Friday</th>
-                    <th>Saturday</th>
-                    <th>Start Time</th>
-                    <th>End Time</th>
-                </tr>
-            </thead>
-            <tbody>
-                {{#each trip}}
-                <tr>
-                    <td>{{this.startZip}}</td>
-                    <td>{{this.endZip}}</td>
-                    <td>{{this.sun}}</td>
-                    <td>{{this.mon}}</td>
-                    <td>{{this.tue}}</td>
-                    <td>{{this.wed}}</td>
-                    <td>{{this.thur}}</td>
-                    <td>{{this.fri}}</td>
-                    <td>{{this.sat}}</td>
-                    <td>{{this.startTime}}</td>
-                    <td>{{this.endTime}}</td>
-                    {{!--<td>cap</td>--}}
-                    {{!--<td>numPeople</td>--}}
-                </tr>
-                {{/each}}        
-            </tbody>
-        </table>
+</div>
+<div class="col-md-6">
+    <!-- picture goes here -->
+    <img src="static/img/traffic.jpg" class="img-responsive img-rounded">
+</div>
+<div class="clearfix"></div>
+<br>
+<div class="col-xs-12">
+    {{#if trip}}
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Start Zip Code</th>
+                <th>End Zip Code</th>
+                <th>Sunday</th>
+                <th>Monday</th>
+                <th>Tuesday</th>
+                <th>Wednesday</th>
+                <th>Thursday</th>
+                <th>Friday</th>
+                <th>Saturday</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Cancel</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each trip}}
+            <tr>
+                <td>{{this.startZip}}</td>
+                <td>{{this.endZip}}</td>
+                <td>{{this.sun}}</td>
+                <td>{{this.mon}}</td>
+                <td>{{this.tue}}</td>
+                <td>{{this.wed}}</td>
+                <td>{{this.thur}}</td>
+                <td>{{this.fri}}</td>
+                <td>{{this.sat}}</td>
+                <td>{{this.startTime}}</td>
+                <td>{{this.endTime}}</td>
+                <td><a href="/cancel-confirm?id={{this.tid}}">Cancel</a></td>
+                {{!--<td>cap</td>--}}
+                {{!--<td>numPeople</td>--}}
+            </tr>
+            {{/each}}        
+        </tbody>
+    </table>
+    {{/if}}
 </div>
