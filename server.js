@@ -31,197 +31,120 @@ app.use('/static', express.static('client'));
 
 app.get('/', function(req, res) {
    res.render('home', {
-       title: 'Social Ridesharing'
+       title: 'Social Ridesharing',
+       authenticated: req.session.user ? true : false,
+       name: req.session.user ? req.session.user.fname : undefined
    });
 });
 
-app.get('/driverSignUp', function(req, res) {
-    res.render('signUp', {
-        title: 'Driver Sign Up',
-        role: 'Driver'
+app.get('/login', function(req, res) {
+    res.render('login');
+});
+
+app.post('/login', function(req, res) {
+    var findUser = "SELECT * FROM people where phone=?";
+    pool.query(findUser, [req.body.phone], function(err, result) {
+        if(err) {
+            res.render('login', {
+                error: 'Database error. Please try again later.'
+            });
+        } else if(result === undefined || result.length === 0) {
+            res.render('login', {
+                error: "Sorry, we couldn't find a user with that phone number."
+            });
+        } else {
+            req.session.user = { fname: result[0].fname, lname: result[0].lname, phone: result[0].phone };
+            res.redirect('/');
+        }
     });
 });
 
-app.post('/driverSignUp', function(req, res, next) {
-    if(req.body.FirstName.length > 0 && req.body.LastName.length > 0 && req.body.PhoneNumber.length > 0) {
-        pool.query("INSERT INTO `people` (`fname`, `lname`, `phone`, `driver`) VALUES (?, ?, ?, ?)", 
-            [req.body.FirstName, req.body.LastName, req.body.PhoneNumber, 1], function(err, result) {
-            if(err) {
-                res.send('Database query was not successful' + err);
-                next(err);
-            }
-            res.render('signupsuccess', {
-                title: 'Sign Up Successful',
-                driver: true
-            });
-        });
-    }
-});
+app.get('/logout', function(req, res) {
+    req.session.destroy();
+    res.redirect('/');
+})
 
-// app.get('/riderSignUp', function(req, res) {
-//     res.render('signUp', {
-//         title: 'Rider Sign Up',
-//         role: 'Rider'
-//     });
-// });
-
-// app.post('/riderSignUp', function(req, res, next) {
-//     if(req.body.FirstName.length > 0 && req.body.LastName.length > 0 && req.body.PhoneNumber.length > 0) {
-//         pool.query("INSERT INTO `people` (`fname`, `lname`, `phone`, `driver`) VALUES (?, ?, ?, ?)", 
-//             [req.body.FirstName, req.body.LastName, req.body.PhoneNumber, 0], function(err, result) {
-//             if(err) {
-//                 res.send('Database query was not successful' + err);
-//                 next(err);
-//             }
-//             res.render('signupsuccess', {
-//                 title: 'Sign Up Successful',
-//                 rider: true        
-//             });
-//         });
-//     }
-// });
-
-// app.get('/riderOffer', function(req, res) {
-//     res.render('offer', {
-//         title: 'Ride Request',
-//         tableTitle: 'Ride Request'
-//     });
-// });
-
-// app.post('/riderOffer', function(req, res, next) {
-//   if(req.body) {
-//         pool.query("SELECT pid FROM `people` WHERE phone=" + req.body.phoneNumber, function(err, result) {
-//             if(err || result.length === 0) {
-//                 console.log("not found");
-//                 res.send("Phone number not registered. Please register before submitting an offer.");
-//                 return;
-//             }
-//             console.log('inserting into trips');
-            
-//             var fields = ['startZip', 'endZip', 'sun', 'mon', 'tue', 'wed', 'thur', 'fri', 'sat', 'startTime', 'endTime', 'cap', 'numPeople', 'pid'];
-//             var defaults = [undefined, undefined, 0, 0, 0, 0, 0, 0, 0, undefined, undefined, 0, 1, result[0].pid];
-//             var values = [];
-//             var query = [];
-//             query.push("INSERT INTO `trips` ");
-//             query.push("(");
-//             for(var f in fields) {
-//                 query.push("`" + fields[f] + "`");
-//                 if(f != fields.length - 1)
-//                     query.push(", ");
-                    
-//                 var value = req.body[fields[f]] || defaults[f];
-//                 if(value === undefined) {
-//                     throw "Value " + fields[f] + " was not defined!";
-//                 }
-//                 values.push(value);
-//             }
-//             // values.push(result[0].pid);
-//             query.push(") VALUES (");
-//             for(var f in fields) {
-//                 query.push("?");
-//                 if(f != fields.length - 1)
-//                     query.push(", ");
-//             }
-//             query.push(")");
-            
-//             //console.log(query.join(""));
-//             //console.log(values);
-            
-//             var pid = result[0].pid;
-            
-//             pool.query(query.join(""), values, function(err, result) {
-//                 res.render('offerSuccess');
-//                 if(err) {
-//                     next(err);
-//                     return;
-//                 }
-                
-//                 // need to match and insert into people trips
-//             });
-//         });
-//     } 
-// });
-
-app.get('/driverOffer', function(req, res) {
-    res.render('offer', {
-        title: 'Ride Offer',
-        tableTitle: 'Ride Offer',
-        driver: true
+app.get('/register', function(req, res) {
+    res.render('register', {
+        title: 'Registration'
     });
 });
 
-app.post('/driverOffer', function(req, res, next) {
-    if(req.body) {
-        // var values = [req.body.startZip, req.body.endZip, req.body.sun, req.body.mon, req.body.tue, req.body.wed, req.body.thur,
-        // req.body.fri, req.body.sat, req.body.startTime, req.body.endTime]
-        // pool.query("INSERT INTO `trips` (`startZip`, `endZip`, `sun`, `mon`, `tue`, `wed`, `thur`, `fri`, `sat`, `startTime`, `endTime`, `cap`) VALUES "
-        // + "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?", values, function);
-        pool.query("SELECT pid FROM `people` WHERE phone=" + req.body.phoneNumber, function(err, result) {
-            if(err || result.length === 0) {
-                console.log("not found");
-                res.send("Phone number not registered. Please register before submitting an offer.");
-                return;
-            }
-            
-            console.log('inserting into trips');
-            
-            var fields = ['startZip', 'endZip', 'sun', 'mon', 'tue', 'wed', 'thur', 'fri', 'sat', 'startTime', 'endTime', 'cap', 'numPeople', 'pid'];
-            var defaults = [undefined, undefined, 0, 0, 0, 0, 0, 0, 0, undefined, undefined, undefined, 1, result[0].pid];
-            var values = [];
-            var query = [];
-            query.push("INSERT INTO `trips` ");
-            query.push("(");
-            for(var f in fields) {
-                query.push("`" + fields[f] + "`");
-                if(f != fields.length - 1)
-                    query.push(", ");
-                    
-                var value = req.body[fields[f]] || defaults[f];
-                if(value === undefined) {
-                    throw "Value " + fields[f] + " was not defined!";
-                }
-                values.push(value);
-            }
-            query.push(") VALUES (");
-            for(var f in fields) {
-                query.push("?");
-                if(f != fields.length - 1)
-                    query.push(", ");
-            }
-            query.push(")");
-            
-            //console.log(query.join(""));
-            //console.log(values);
-            
-            var pid = result[0].pid;
-            
-            pool.query(query.join(""), values, function(err, result) {
-                if(err) {
-                    res.send('`trips` query was not successful' + err);
-                    next(err);
-                }
-                res.render('offerSuccess');
-                
-                var tid = result.insertId;
-                pool.query("INSERT INTO `people_trips` (pid, tid, driverId) VALUES (?, ?, ?)", [pid, tid, pid], function(err, result) {
-                    if(err) {
-                        res.send('`people_trips` query was not successful' + err);
-                    }
-                    res.send('Offer posted successfully!');
-                });
-            });
+app.post('/register', function(req, res, next) {
+    if(req.body.FirstName.length == 0 || req.body.LastName.length == 0 || req.body.PhoneNumber.length == 0) {
+        res.render('register', {
+            title: 'Registration',
+            error: 'All fields are required!'
         });
+        return;
     }
     
+    pool.query("SELECT * FROM `people` WHERE phone=?", [req.body.PhoneNumber], function(err, result) {
+        if(err) {
+            res.render('register', {
+                title: 'Registration',
+                error: 'Database error when checking if account already exists.'
+            });
+            return;
+        } else if(result !== undefined && result.length > 0) {
+            res.render('register', {
+                title: 'Registration',
+                error: 'Someone has already made an account with that phone number!'
+            });
+            return;
+        }
+        
+        pool.query("INSERT INTO `people` (`fname`, `lname`, `phone`) VALUES (?, ?, ?)", 
+            [req.body.FirstName, req.body.LastName, req.body.PhoneNumber], function(err, result) {
+            if(err) {
+                res.render('register', {
+                    title: 'Registration',
+                    error: 'Database error when inserting new account.'
+                });
+                return;
+            }
+            res.redirect('/login');
+        });
+    });
+        
 });
 
-// default view of /myTrips
-// generated if user performs GET request of /myTrips
-// allows user to enter phone number to generate list of trips
-// which are attached to a trip id
-app.get('/myTrips', function(req, res, next) {
-        res.render("myTrips"); 
-}); 
+app.get('/post-offer', checkAuth, function(req, res) {
+    res.render('offer', {
+        title: 'Ride Offer',
+        tableTitle: 'Ride Offer'
+    });
+});
+
+app.post('/post-offer', checkAuth, function(req, res, next) {
+    if(req.body) {
+        getPid(req, res, function(pid) {
+            getTid(req, res, function(tid) {
+                if(tid === undefined) {
+                    addTrip(req, res, function() {
+                        getTid(req, res, function(tid) {
+                            addPeopleTripAssociation(req, res, tid, pid, pid, function(exists) {
+                                res.redirect('/myTrips');
+                            });
+                        });
+                    });
+                } else {
+                    getDriverId(req, res, tid, function(driverId) {
+                        addPeopleTripAssociation(req, res, tid, pid, driverId, function(exists) {
+                            if(exists) {
+                                res.render('offer', { error: "Sorry, you're already part of this trip!" });
+                                return;
+                            }
+                            updateNumPeople(req, res, tid, "+1", function() {
+                                res.redirect('/myTrips');
+                            });
+                        });
+                    });
+                }
+            });
+        });
+    }
+});
 
 // view of /myTrips once user has entered valid phone number
 // generates list of trips which are attached to a trip id
@@ -231,14 +154,17 @@ app.get('/myTrips', function(req, res, next) {
 // INNER JOIN people_trip ON people_trip.tid = trip.tid
 // INNER JOIN people ON people.id = people_trip.pid
 // WHERE people.phone = ?
-app.post('/myTrips', function(req, res, next) {
+app.get('/myTrips', checkAuth, function(req, res, next) {
     var context = {};
     
     pool.query("SELECT * FROM trips " +
-        "INNER JOIN people ON people.pid = trips.pid " + 
-        "WHERE phone=?", [req.body.phone], function(err, rows, fields) {
+        "INNER JOIN people_trips on people_trips.tid = trips.tid " +
+        "INNER JOIN people ON people.pid = people_trips.pid " +
+        "WHERE people.phone=?", [req.session.user.phone], function(err, rows, fields) {
             if(err) {
-                res.send("There was an error " + err);
+                console.log(err);
+                console.log("couldn't get trips for user");
+                res.send("couldn't get trips for user");
                 next(err); 
             }
             // console.log(rows);
@@ -254,7 +180,7 @@ app.post('/myTrips', function(req, res, next) {
 // taken from trip id. Requests user confirmation for trip deletion.
 // Confirm: /cancel (POST)
 // Cancel: /myTrips (GET)
-app.get('/cancel-confirm', function(req, res, next) {
+app.get('/cancel-confirm', checkAuth, function(req, res, next) {
     var context = {};
     pool.query("SELECT * FROM trips WHERE tid=?", [req.query.id], function(err, rows, fields) {
         if (err) {
@@ -268,14 +194,59 @@ app.get('/cancel-confirm', function(req, res, next) {
 
 // If user confirms trip cancellation on /cancel-confirm, POSTs MySQL DELETE query
 // to database. Generates trip cancellation confirmation page with link to /myTrips
-app.get('/cancel', function(req, res, next){
-    pool.query("DELETE FROM trips WHERE tid=?", [req.query.id], function(err, result) {
-        if(err){
-            next(err);
-            return;
-        }
+app.get('/cancel', checkAuth, function(req, res, next){
+    var tid = req.query.id;
+    getDriverId(req, res, tid, function(driverId) {
+        getPid(req, res, function(pid) {
+            var cancelQuery = "DELETE FROM people_trips WHERE pid=" + pid + " AND tid=" + tid;
+            pool.query(cancelQuery, function(err, result) {
+                if(err){
+                    next(err);
+                    return;
+                }
+                if(driverId === pid) {
+                    var cancelDriverQuery = "SELECT pid FROM people_trips WHERE tid=" + tid + " AND pid != " + driverId;
+                    pool.query(cancelDriverQuery, function(err, results) {
+                        if(err) {
+                            console.log(err);
+                            res.send("could not cancel trip");
+                            return;
+                        }
+                        if(results === undefined || results.length === 0) {
+                            // nobody else is in the trip
+                            console.log('no viable driver');
+                            pool.query("DELETE FROM trips WHERE tid=?", [tid], function(err, results) {
+                                if(err) {
+                                    console.log(err);
+                                    res.send("couldn't delete trip");
+                                    return;
+                                }
+                                res.render('cancel');
+                            });
+                        } else {
+                            console.log('found new driver');
+                            var newDriver = results[0].pid;
+                            var updateDriverQuery = "UPDATE people_trips SET driverId = " + newDriver + " WHERE tid = " + tid;
+                            pool.query(updateDriverQuery, function(err, results) {
+                                if(err) {
+                                    console.log(err);
+                                    res.send("couldn't update driverId");
+                                    return;
+                                }
+                                updateNumPeople(req, res, tid, "-1", function() {
+                                    res.render('cancel');
+                                });
+                            });
+                        }
+                    });
+                } else {
+                    updateNumPeople(req, res, tid, "-1", function() {
+                        res.render('cancel');
+                    });
+                }
+            });    
+        });
     });
-    res.render('cancel');
 });
 
 app.use(function(err, req, res, next) {
@@ -289,3 +260,138 @@ app.use(function(err, req, res, next) {
 app.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function() {
   console.log("Server listening");
 });
+
+function checkAuth(req, res, next) {
+    if(req.session.user) {
+        next();
+    } else {
+        res.redirect('/');
+    }
+}
+
+function getPid(req, res, callback) {
+    pool.query("SELECT pid FROM `people` WHERE phone=" + req.session.user.phone, function(err, results) {
+        if(err || results.length === 0) {
+            console.log(err);
+            console.log("not found");
+            res.send("Phone number not registered. Please register before submitting an offer.");
+            return;
+        }
+            
+        var pid = results[0].pid;
+        callback(pid);
+    });
+}
+
+function getTid(req, res, callback) {
+    var selectTidQuery = "SELECT tid FROM trips WHERE startZip=" + req.body.startZip 
+        + " AND endZip=" + req.body.endZip 
+        + " AND sun=" + (req.body.sun || 0)
+        + " AND mon=" + (req.body.mon || 0)
+        + " AND tue=" + (req.body.tue || 0)
+        + " AND wed=" + (req.body.wed || 0)
+        + " AND thur=" + (req.body.thur || 0)
+        + " AND fri=" + (req.body.fri || 0)
+        + " AND sat=" + (req.body.sat || 0)
+        + " AND startTime='" + req.body.startTime 
+        + "' AND endTime='" + req.body.endTime + "'"
+        + " AND cap!=numPeople;";
+    
+    console.log(selectTidQuery);
+    
+    pool.query(selectTidQuery, function(err, results) {
+        if(err) {
+            console.log(err);
+            console.log("trip not found");
+            res.send("Phone number not registered. Please register before submitting an offer.");
+        } else if(results === undefined || results.length === 0) {
+            callback(undefined);
+        } else {
+            var tid = results[0].tid;
+            callback(tid);
+        }
+    });
+}
+
+function addTrip(req, res, callback) {
+    var fields = ['startZip', 'endZip', 'sun', 'mon', 'tue', 'wed', 'thur', 'fri', 'sat', 'startTime', 'endTime', 'cap', 'numPeople'];
+    var defaults = [undefined, undefined, 0, 0, 0, 0, 0, 0, 0, undefined, undefined, undefined, 1];
+    var values = [];
+    var query = [];
+    query.push("INSERT INTO `trips` ");
+    query.push("(");
+    for(var f in fields) {
+        query.push("`" + fields[f] + "`");
+        if(f != fields.length - 1)
+            query.push(", ");
+            
+        var value = req.body[fields[f]] || defaults[f];
+        if(value === undefined) {
+            throw "Value " + fields[f] + " was not defined!";
+        }
+        values.push(value);
+    }
+    query.push(") VALUES (");
+    for(var f in fields) {
+        query.push("?");
+        if(f != fields.length - 1)
+            query.push(", ");
+    }
+    query.push(")");
+    
+    console.log(query.join(""));
+    console.log(values);
+    pool.query(query.join(""), values, function(err, results) {
+        if(err) {
+            console.log(err);
+            console.log("couldn't add trip");
+            res.send("couldn't add trip");
+            return;
+        }
+        callback();
+    });
+}
+
+function getDriverId(req, res, tid, callback) {
+    var driverQuery = "SELECT driverId FROM people_trips WHERE tid=" + tid;
+    pool.query(driverQuery, function(err, results) {
+        if(err) {
+            console.log(err);
+            console.log("couldn't get driver id");
+            res.send("couldn't get driver id");
+            return;
+        }
+        
+        var driverId = (results === undefined || results.length === 0) ? undefined : results[0].driverId;
+        callback(driverId);
+    });
+}
+
+function addPeopleTripAssociation(req, res, tid, pid, driverId, callback) {
+    pool.query("INSERT INTO people_trips (tid, pid, driverId) VALUES (?, ?, ?)", [tid, pid, driverId], function(err, results) {
+        if(err) {
+            console.log(err);
+            console.log("couldn't add people trip");
+            if(err.code === 'ER_DUP_ENTRY')
+                callback(true);
+            else
+                res.send("couldn't add people trip");
+            return;
+        }
+        
+        callback(false);
+    });
+}
+
+function updateNumPeople(req, res, tid, change, callback) {
+    var updateQuery = "UPDATE trips SET numPeople = numPeople" + change + " WHERE tid = " + tid;
+    pool.query(updateQuery, function(err, results) {
+        if(err) {
+            console.log(err);
+            console.log("couldn't increment numPeople");
+            res.send("couldn't increment numPeople");
+            return;
+        }
+        callback();
+    });
+}

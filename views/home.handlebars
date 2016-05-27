@@ -1,19 +1,44 @@
 <div class="jumbotron">
+    <h2>Welcome to Social Ridehsaring</h2>
     <p class="lead">The future of carpooling</p>
 </div>
-<div class="col-md-4">
-    <h3>Drivers</h3>
-    <p><a href="/driverSignUp">Click here</a> to sign up.</p>
-    <p><a href="/driverOffer">Click here</a> to post a ride offer.</p>
+
+{{#if authenticated}}
+
+<div class="row">
+    Welcome back, {{name}}
 </div>
 
-{{!--<div class="col-md-4">--}}
-{{!--    <h3>Riders</h3>--}}
-{{!--    <p><a href="/riderSignUp">Click here</a> to sign up.</p>--}}
-{{!--    <p><a href="/riderOffer">Click here</a> to post a ride request.</p>--}}
-{{!--</div>--}}
+<div class="col-md-4">
+    <h4>Post an offer</h4>
+    <p>Ready to get started? Post a ride offer to try and find someone to share the trip with.</p>
+    <a href="/post-offer" class="btn btn-default btn-block">Post an offer</a>
+</div>
 
 <div class="col-md-4">
-    <h3> My Trips </h3>
-    <p><a href="/myTrips">Click here</a> to view your trips.</p>
+    <h4>View your trips</h4>
+    <p>Wondering if you've found any matches? Want to see who you're riding with?</p>
+    <a href="/myTrips" class="btn btn-default btn-block">My trips</a>
 </div>
+
+<div class="col-md-4">
+    <h4>Log out</h4>
+    <p>All finished for now?</p>
+    <a href="/logout" class="btn btn-default btn-block">Log out</a>
+</div>
+
+{{else}}
+
+<div class="col-md-4">
+  <h4>Sign up</h4>
+  <p>Haven't registered yet? Head on over to the sign up page to get started.</p>
+  <a href="/register" class="btn btn-default btn-block">Sign up</a>
+</div>
+
+<div class="col-md-4">
+  <h4>Log in</h4>
+  <p>Already have an account? Log in to get started.</p>
+  <a href="/login" class="btn btn-default btn-block">Log in</a>
+</div>
+
+{{/if}}

@@ -1,0 +1,16 @@
+<h2>Log in</h2>
+<p>To log in, please supply your phone number.</p>
+
+{{#if error}}
+    <div class="alert alert-danger">
+        {{error}}
+    </div>
+{{/if}}
+
+<form method="post">
+    <legendset>User info</legendset>
+    <br>
+    <input type="text" name="phone">
+    <br>
+    <input type="submit" value="Log in">
+</form>

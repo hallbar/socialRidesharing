@@ -1,17 +1,14 @@
-<div class="col-md-6">
-    <form method="post">
-        <legend> My Trips </legend>
-        <div class="form-group">
-            <label for="phone"> Please enter your phone number </label>
-            <input class="form-control" type="text" name="phone" id="phone">
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
+<div class="row">
+    <div class="col-md-6">
+        <h2>My Trips</h2>
+    </div>
+    
+    <div class="col-md-6">
+        <!-- picture goes here -->
+        <img src="static/img/traffic.jpg" class="img-responsive img-rounded">
+    </div>
 </div>
-<div class="col-md-6">
-    <!-- picture goes here -->
-    <img src="static/img/traffic.jpg" class="img-responsive img-rounded">
-</div>
+
 <div class="clearfix"></div>
 <br>
 <div class="col-xs-12">
@@ -38,13 +35,13 @@
             <tr>
                 <td>{{this.startZip}}</td>
                 <td>{{this.endZip}}</td>
-                <td>{{this.sun}}</td>
-                <td>{{this.mon}}</td>
-                <td>{{this.tue}}</td>
-                <td>{{this.wed}}</td>
-                <td>{{this.thur}}</td>
-                <td>{{this.fri}}</td>
-                <td>{{this.sat}}</td>
+                <td>{{#if this.sun}}<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>{{else}}<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>{{/if}}</td>
+                <td>{{#if this.mon}}<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>{{else}}<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>{{/if}}</td>
+                <td>{{#if this.tue}}<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>{{else}}<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>{{/if}}</td>
+                <td>{{#if this.wed}}<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>{{else}}<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>{{/if}}</td>
+                <td>{{#if this.thur}}<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>{{else}}<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>{{/if}}</td>
+                <td>{{#if this.fri}}<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>{{else}}<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>{{/if}}</td>
+                <td>{{#if this.sat}}<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>{{else}}<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>{{/if}}</td>
                 <td>{{this.startTime}}</td>
                 <td>{{this.endTime}}</td>
                 <td><a href="/cancel-confirm?id={{this.tid}}">Cancel</a></td>

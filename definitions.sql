@@ -4,7 +4,7 @@ CREATE TABLE `people` (
 	`lname` VARCHAR(255) NOT NULL,
 	`phone` VARCHAR(255) NOT NULL,
 	PRIMARY KEY(`pid`),
-	UNIQUE KEY(`fname`, `lname`, `phone`)
+	UNIQUE KEY(`phone`)
 ) ENGINE = InnoDB;
 
 CREATE TABLE `trips` (
@@ -22,9 +22,7 @@ CREATE TABLE `trips` (
 	`endTime` VARCHAR(5) NOT NULL,
 	`cap` INT(2) NOT NULL,
 	`numPeople` INT(2) NOT NULL,
-	-- `pid` INT NOT NULL,
-	PRIMARY KEY(`tid`),
-	-- FOREIGN KEY(`pid`) REFERENCES `people`(`pid`) ON DELETE CASCADE
+	PRIMARY KEY(`tid`)
 ) ENGINE = InnoDB;
 
 CREATE TABLE `people_trips` (

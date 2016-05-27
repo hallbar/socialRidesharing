@@ -1,6 +1,13 @@
 <div class="col-md-6">
+	
+	{{#if error}}
+		<div class="alert alert-danger">
+	        {{error}}
+	    </div>
+	{{/if}}
+	
 	<form method="post">
-			<legend>{{role}} Info</legend>
+			<legend>User Info</legend>
 			<div class="form-group">
 				<label for="FirstName">First Name</label>
 				<input class="form-control" type="text" name="FirstName" id="FirstName">

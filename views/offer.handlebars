@@ -1,6 +1,13 @@
 <div class="col-md-6">
+    
+    {{#if error}}
+		<div class="alert alert-danger">
+	        {{error}}
+	    </div>
+	{{/if}}
+    
     <form method="post">
-            <legend>{{tableTitle}}</legend>
+        <legend>{{tableTitle}}</legend>
         <div class="form-group">    
             <label for="startZip">Starting zipcode</label>
             <input class="form-control" type="text" name="startZip" id="startZip">
@@ -20,22 +27,18 @@
             <input type="checkbox" name="sat" value="1"> Sat
         </div>
         <div class="form-group">
-            <label for="startTime">Start time (24 hour, e.g. "13:00" instead of "1:00 PM")</label>
+            <label for="startTime">Start time</label>
+            {{!--<input class="form-control" type="text" name="startTime" id="startTime">--}}
             <input class="form-control" type="time" name="startTime" id="startTime">
         </div>
         <div class="form-group">
-            <label for="endTime">End time (24 hour, e.g. "13:00" instead of "1:00 PM")</label>
+            <label for="endTime">End time</label>
+            {{!--<input class="form-control" type="text" name="endTime" id="endTime>"--}}
             <input class="form-control" type="time" name="endTime" id="endTime">
         </div>
-        {{#if driver}}
-            <div class="form-group">
-                <label for="cap">Capacity</label>
-                <input class="form-control" type="number" min="1" max="10" name="cap" id="cap">
-            </div>
-        {{/if}}
         <div class="form-group">
-            <label for="phoneNumber">Phone number</label>
-            <input class="form-control" type="tel" name="phoneNumber" id="phoneNumber">
+            <label for="cap">Capacity</label>
+            <input class="form-control" type="number" min="1" max="10" name="cap" id="cap">
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
