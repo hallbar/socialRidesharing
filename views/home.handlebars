@@ -1,44 +1,58 @@
 <div class="jumbotron">
-    <h2>Welcome to Social Ridehsaring</h2>
-    <p class="lead">The future of carpooling</p>
+    <h2>Welcome to Social Ridesharing</h2>
+    <p>The Future of Carpooling</p>
 </div>
 
 {{#if authenticated}}
 
 <div class="row">
-    Welcome back, {{name}}
+   <h3>Welcome back, {{name}}</h3>
 </div>
 
+{{#if subscribed}}
+
 <div class="col-md-4">
-    <h4>Post an offer</h4>
+    <h4><span class="glyphicon glyphicon-pushpin" aria-hidden="true"></span> Post an Offer</h4>
     <p>Ready to get started? Post a ride offer to try and find someone to share the trip with.</p>
-    <a href="/post-offer" class="btn btn-default btn-block">Post an offer</a>
+    <a href="/post-offer" class="btn btn-success btn-block">Post an Offer</a>
 </div>
 
 <div class="col-md-4">
-    <h4>View your trips</h4>
+    <h4><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> View Your Trips</h4>
     <p>Wondering if you've found any matches? Want to see who you're riding with?</p>
-    <a href="/myTrips" class="btn btn-default btn-block">My trips</a>
-</div>
-
-<div class="col-md-4">
-    <h4>Log out</h4>
-    <p>All finished for now?</p>
-    <a href="/logout" class="btn btn-default btn-block">Log out</a>
+    <a href="/myTrips" class="btn btn-success btn-block">My Trips</a>
 </div>
 
 {{else}}
 
 <div class="col-md-4">
-  <h4>Sign up</h4>
+    <h4><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Subscribe</h4>
+    <p>To use this service, you must first subscribe. The cost is $25/week.</p>
+    <a href="/subscribe" class="btn btn-success btn-block">Subscribe</a>
+</div>
+
+{{/if}}
+
+<div class="col-md-4">
+    <h4><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Log Out</h4>
+    <p>All finished for now?</p>
+   <br/>
+    <a href="/logout" class="btn btn-success btn-block">Log Out</a>
+</div>
+
+{{else}}
+
+<div class="col-md-4">
+  <h4><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Sign Up</h4>
   <p>Haven't registered yet? Head on over to the sign up page to get started.</p>
-  <a href="/register" class="btn btn-default btn-block">Sign up</a>
+  <a href="/register" class="btn btn-success btn-block">Sign Up</a>
 </div>
 
 <div class="col-md-4">
-  <h4>Log in</h4>
+  <h4><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Log In</h4>
   <p>Already have an account? Log in to get started.</p>
-  <a href="/login" class="btn btn-default btn-block">Log in</a>
+  <br/>
+  <a href="/login" class="btn btn-success btn-block">Log In</a>
 </div>
 
 {{/if}}

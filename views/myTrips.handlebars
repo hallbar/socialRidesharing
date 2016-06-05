@@ -3,11 +3,7 @@
         <h2>My Trips</h2>
     </div>
     
-    <div class="col-md-6">
-        <!-- picture goes here -->
-        <img src="static/img/traffic.jpg" class="img-responsive img-rounded">
-    </div>
-</div>
+
 
 <div class="clearfix"></div>
 <br>
@@ -18,16 +14,16 @@
             <tr>
                 <th>Start Zip Code</th>
                 <th>End Zip Code</th>
-                <th>Sunday</th>
-                <th>Monday</th>
-                <th>Tuesday</th>
-                <th>Wednesday</th>
-                <th>Thursday</th>
-                <th>Friday</th>
-                <th>Saturday</th>
+                <th>Sun</th>
+                <th>Mon</th>
+                <th>Tues</th>
+                <th>Wed</th>
+                <th>Thurs</th>
+                <th>Fri</th>
+                <th>Sat</th>
                 <th>Start Time</th>
                 <th>End Time</th>
-                <th>Cancel</th>
+                <th>Trip Status</th>
             </tr>
         </thead>
         <tbody>
@@ -44,7 +40,8 @@
                 <td>{{#if this.sat}}<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>{{else}}<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>{{/if}}</td>
                 <td>{{this.startTime}}</td>
                 <td>{{this.endTime}}</td>
-                <td><a href="/cancel-confirm?id={{this.tid}}">Cancel</a></td>
+                <!--<td>{{this.numPeople}}</td>-->
+                <td><a href="/trip_details?id={{this.tid}}">View trip details</a></td>
                 {{!--<td>cap</td>--}}
                 {{!--<td>numPeople</td>--}}
             </tr>
@@ -52,4 +49,13 @@
         </tbody>
     </table>
     {{/if}}
+    
+    
+    <div class="col-md-6">
+        <!-- picture goes here -->
+        <img src="static/img/traffic.jpg" class="img-responsive img-rounded">
+    </div>
+    
+    
+    
 </div>

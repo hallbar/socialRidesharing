@@ -12,7 +12,9 @@
     "express-handlebars": "^3.0.0",
     "express-session": "^1.13.0",
     "forever": "^0.15.1",
+    "http": "0.0.0",
     "mysql": "^2.10.2",
+    "paypal-rest-sdk": "^1.6.8",
     "socket.io": "~0.9.14"
   }
 }

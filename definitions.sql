@@ -34,3 +34,11 @@ CREATE TABLE `people_trips` (
 	FOREIGN KEY(`tid`) REFERENCES `trips`(`tid`) ON DELETE CASCADE,
 	FOREIGN KEY(`driverId`) REFERENCES `people`(`pid`) ON DELETE CASCADE
 ) ENGINE = InnoDB;
+
+CREATE TABLE `subscriptions` (
+	`pid` INT NOT NULL,
+	`token` VARCHAR(25) NOT NULL,
+	`nextBillDate` DATETIME NOT NULL,
+	PRIMARY KEY(`pid`, `token`),
+	FOREIGN KEY(`pid`) REFERENCES `people`(`pid`) ON DELETE CASCADE
+) ENGINE = InnoDB;
